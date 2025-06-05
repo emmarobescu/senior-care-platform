@@ -36,3 +36,46 @@ footer {
   font-size: 0.9rem;
   color: #666;
 }
+/* Assessment Form Styles */
+main h2 {
+  margin-bottom: 15px;
+  color: #0066cc;
+}
+
+#assessment-form {
+  max-width: 400px;
+  margin: 0 auto 40px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#assessment-form label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+#assessment-form input,
+#assessment-form select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#assessment-form button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#assessment-form button:hover {
+  background-color: #0055aa;
+}
