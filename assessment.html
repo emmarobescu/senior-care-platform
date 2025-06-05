@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facility Assessment – Senior Care Finder</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Senior Care Finder</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="assessment.html">Start Assessment</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Find Your Best Care Options</h2>
+    <form id="assessment-form">
+      <!-- Location -->
+      <label for="location">ZIP Code or City:</label>
+      <input type="text" id="location" name="location" placeholder="e.g., 85001" required />
+
+      <!-- Care Type -->
+      <label for="care-type">Care Type:</label>
+      <select id="care-type" name="care-type" required>
+        <option value="">--Choose one--</option>
+        <option value="assisted-supervisory">Assisted Living (Supervisory)</option>
+        <option value="assisted-personal">Assisted Living (Personal)</option>
+        <option value="assisted-directed">Assisted Living (Directed)</option>
+        <option value="memory-care">Memory Care</option>
+        <option value="skilled-nursing">Skilled Nursing</option>
+      </select>
+
+      <!-- Budget -->
+      <label for="budget">Monthly Budget (USD):</label>
+      <input type="number" id="budget" name="budget" min="0" placeholder="e.g., 3000" required />
+
+      <!-- Submit -->
+      <button type="submit">See Matching Facilities</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Senior Care Finder</p>
+  </footer>
+
+  <script src="scripts/app.js"></script>
+</body>
+</html>
