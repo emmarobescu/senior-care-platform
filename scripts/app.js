@@ -10,5 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Assessment submitted:", { location, careType, budget });
     alert(`Searching for facilities near ${location} needing ${careType} within $${budget}/mo.`);
     // Later: call a function to fetch/filter data
+    fetch("data/facilities.json")
+  .then(r => r.json())
+  .then(facilities => {
+    // filter & map exactly as before
+  });
+
   });
 });
