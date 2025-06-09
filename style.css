@@ -80,39 +80,48 @@ main h2 {
   background-color: #0055aa;
 }
 
-/* SIDEBAR */
+/* MAP WRAPPER must be position:relative (done inline or in CSS) */
+#map-wrapper {
+  position: relative;
+  /* height set inline, or set here: height: 80vh; */
+}
+
+/* Sidebar inside map-wrapper */
 #sidebar {
   position: absolute;
   top: 0;
   right: 0;
-  height: 100%;
   width: 0;
+  height: 100%;
   background: white;
   box-shadow: -2px 0 5px rgba(0,0,0,0.3);
   overflow: hidden;
   transition: width 0.3s ease;
   z-index: 1000; /* above the map */
 }
+
+/* Expanded width */
 #sidebar.expanded {
-  width: 300px; /* expanded width */
+  width: 300px;
 }
+
+/* Toggle button */
 #sidebar-toggle {
   position: absolute;
-  left: -30px;
-  top: 20px;
-  width: 30px;
-  height: 30px;
+  left: -30px; top: 20px;
+  width: 30px; height: 30px;
   background: #0066cc;
   color: #fff;
   border: none;
   border-radius: 4px 0 0 4px;
   cursor: pointer;
 }
+
+/* Sidebar content scrolls if too tall */
 #sidebar-content {
   padding: 20px;
-  overflow-y: auto;
   height: 100%;
+  overflow-y: auto;
 }
-#sidebar-content h3 {
-  margin-top: 0;
-}
+
+#sidebar-content h3 { margin-top: 0; }
