@@ -6,14 +6,12 @@
   <title>Arizona Senior Care Finder</title>
   <!-- Link to my CSS -->
   <link rel="stylesheet" href="style.css" />
-      <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 
-      />
-      <script
-        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-></script>
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
 </head>
 <body>
   <!-- HEADER -->
@@ -22,19 +20,42 @@
     <nav>
       <a href="index.html">Home</a>
       <a href="assessment.html">Start Assessment</a>
-      <!-- Later: add links to Assessment, Map, Provider Profiles, etc. -->
-      <section id="search-controls">
-  <!-- ZIP, level-of-care inputs, and a button with id="search-button" -->
-      </section>
-      <div id="map" style="height: 80vh; margin-bottom: 20px;"></div>
+      <!-- Later: add links to Provider Profiles, Results, etc. -->
     </nav>
   </header>
+
+  <!-- SEARCH CONTROLS -->
+  <section id="search-controls">
+    <h2>Find Facilities on the Map</h2>
+
+    <label for="zipcode">ZIP Code or City:</label>
+    <input
+      type="text"
+      id="zipcode"
+      name="zipcode"
+      placeholder="e.g., 85001 or Phoenix, AZ"
+    />
+
+    <label for="level-of-care">Level of Care:</label>
+    <select id="level-of-care" name="level-of-care">
+      <option value="">-- Select Care Level --</option>
+      <option value="assisted_supervisory">Assisted Living (Supervisory)</option>
+      <option value="assisted_personal">Assisted Living (Personal)</option>
+      <option value="assisted_directed">Assisted Living (Directed)</option>
+      <option value="memory_care">Memory Care</option>
+      <option value="skilled_nursing">Skilled Nursing</option>
+    </select>
+
+    <button id="search-button">Search</button>
+  </section>
+
+  <!-- MAP CONTAINER -->
+  <div id="map" style="height: 80vh; margin-bottom: 20px;"></div>
 
   <!-- MAIN CONTENT -->
   <main>
     <h2>Welcome to Senior Care Finder</h2>
     <p>Find assisted living, memory care, and nursing facilities near you.</p>
-    <!-- Later: insert Assessment button, Map, Filters, etc. -->
   </main>
 
   <!-- FOOTER -->
@@ -42,7 +63,9 @@
     <p>&copy; 2025 Senior Care Finder</p>
   </footer>
 
-  <!-- Link to your JavaScript -->
+  <!-- Leaflet JS (after map container) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Your application code (after Leaflet) -->
   <script src="scripts/app.js"></script>
 </body>
 </html>
