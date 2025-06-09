@@ -37,21 +37,38 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("No facilities match your search.");
       return;
     }
-    list.forEach((f) => {
-      const lat = parseFloat(f.N_LAT),
+   list.forEach((f) => {
+  const lat = parseFloat(f.N_LAT),
         lng = parseFloat(f.N_LON);
-      if (isNaN(lat) || isNaN(lng)) return;
-      const marker = L.marker([lat, lng]);
-      marker.bindPopup(`
-        <strong>${f.FACILITY_NAME}</strong><br/>
-        ${f.ADDRESS}, ${f.CITY}, AZ ${f.ZIP}<br/>
-        ${f.SUBTYPE}
-      `);
-      markersGroup.addLayer(marker);
-    });
-    // Zoom to the cluster bounds
-    map.fitBounds(markersGroup.getBounds().pad(0.2));
-  }
+  if (isNaN(lat) || isNaN(lng)) return;
+
+  // Create the marker
+  const marker = L.marker([lat, lng]);
+
+  // On click, populate and open the sidebar instead of a popup
+  marker.on("click", () => {
+    // Fill in sidebar fields
+    document.getElementById("sb-name").textContent     = f.FACILITY_NAME;
+    document.getElementById("sb-type").textContent     = f.SUBTYPE;
+    document.getElementById("sb-address").textContent  = `${f.ADDRESS}, ${f.CITY}, AZ ${f.ZIP}`;
+    document.getElementById("sb-phone").textContent    = f.Telephone || "N/A";
+    document.getElementById("sb-capacity").textContent = f.Capacity || "N/A`;
+
+    // Expand the sidebar
+    const sb = document.getElementById("sidebar");
+    sb.classList.add("expanded");
+    sb.classList.remove("collapsed");
+    document.getElementById("sidebar-toggle").textContent = "▶";
+  });
+
+  // Add to the cluster group
+  markersGroup.addLayer(marker);
+});
+
+// After looping, zoom to fit all markers
+if (markersGroup.getLayers().length) {
+  map.fitBounds(markersGroup.getBounds().pad(0.2));
+}
 
   // 6. Filter function
    // 6. Filter & re-plot with explicit mapping
