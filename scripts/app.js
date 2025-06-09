@@ -56,32 +56,26 @@ document.addEventListener("DOMContentLoaded", () => {
   // 6. Filter function
    // 6. Filter & re-plot with explicit mapping
   function filterFacilities() {
-    const zip = zipInput.value.trim().toLowerCase();
+  const zip = zipInput.value.trim().toLowerCase();
+  const careVal = careSelect.value; // now exactly SUBTYPE or empty
 
-    // Map select values to actual keywords in SUBTYPE
-    const careMap = {
-      assisted_supervisory: "SUPERVISORY",
-      assisted_personal:    "PERSONAL",
-      assisted_directed:    "DIRECTED",
-      memory_care:          "MEMORY",
-      skilled_nursing:      "SKILLED NURSING"
-    };
-    const careKey = careMap[careSelect.value] || "";
+  const filtered = facilities.filter(f => {
+    // ZIP match
+    const fzip = ("" + f.ZIP).toLowerCase();
+    const zipOK = !zip || fzip.startsWith(zip);
 
-    const filtered = facilities.filter((f) => {
-      // ZIP match
-      const fzip = ("" + f.ZIP).toLowerCase();
-      const zipOK = !zip || fzip.startsWith(zip);
+    // Care match: exact SUBTYPE match, or no filter
+    const careOK = !careVal || f.SUBTYPE === careVal;
 
-      // Care match: look for the mapped keyword in SUBTYPE
-      const subtype = (f.SUBTYPE || "").toUpperCase();
-      const careOK = !careKey || subtype.includes(careKey);
+    // Must have valid coords
+    const lat = parseFloat(f.N_LAT), lng = parseFloat(f.N_LON);
+    const coordsOK = !isNaN(lat) && !isNaN(lng);
 
-      return zipOK && careOK;
-    });
+    return zipOK && careOK && coordsOK;
+  });
 
-    plotMarkers(filtered);
-  }
+  plotMarkers(filtered);
+}
 
   // 7. Wire up search button
   searchBtn.addEventListener("click", filterFacilities);
