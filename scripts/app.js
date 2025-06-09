@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 3. Grab search controls
   const zipInput = document.getElementById("zipcode");
   const careSelect = document.getElementById("level-of-care");
-  const searchBtn = document.getElementById("search-button");
+  const searchBtn  = document.getElementById("search-button");
 
   // 4. Load JSON
   let facilities = [];
@@ -37,63 +37,74 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("No facilities match your search.");
       return;
     }
-   list.forEach((f) => {
-  const lat = parseFloat(f.N_LAT),
-        lng = parseFloat(f.N_LON);
-  if (isNaN(lat) || isNaN(lng)) return;
 
-  // Create the marker
-  const marker = L.marker([lat, lng]);
+    list.forEach((f) => {
+      const lat = parseFloat(f.N_LAT),
+            lng = parseFloat(f.N_LON);
+      if (isNaN(lat) || isNaN(lng)) return;
 
-  // On click, populate and open the sidebar instead of a popup
-  marker.on("click", () => {
-    // Fill in sidebar fields
-    document.getElementById("sb-name").textContent     = f.FACILITY_NAME;
-    document.getElementById("sb-type").textContent     = f.SUBTYPE;
-    document.getElementById("sb-address").textContent  = `${f.ADDRESS}, ${f.CITY}, AZ ${f.ZIP}`;
-    document.getElementById("sb-phone").textContent    = f.Telephone || "N/A";
-    document.getElementById("sb-capacity").textContent = f.Capacity || "N/A`;
+      // Create the marker
+      const marker = L.marker([lat, lng]);
 
-    // Expand the sidebar
-    const sb = document.getElementById("sidebar");
-    sb.classList.add("expanded");
-    sb.classList.remove("collapsed");
-    document.getElementById("sidebar-toggle").textContent = "▶";
-  });
+      // On click, populate and open the sidebar instead of a popup
+      marker.on("click", () => {
+        // Fill in sidebar fields
+        document.getElementById("sb-name").textContent     = f.FACILITY_NAME;
+        document.getElementById("sb-type").textContent     = f.SUBTYPE;
+        document.getElementById("sb-address").textContent  = `${f.ADDRESS}, ${f.CITY}, AZ ${f.ZIP}`;
+        document.getElementById("sb-phone").textContent    = f.Telephone || "N/A";
+        document.getElementById("sb-capacity").textContent = f.Capacity || "N/A";
 
-  // Add to the cluster group
-  markersGroup.addLayer(marker);
-});
+        // Expand the sidebar
+        const sb = document.getElementById("sidebar");
+        sb.classList.add("expanded");
+        sb.classList.remove("collapsed");
+        document.getElementById("sidebar-toggle").textContent = "◀";
+      });
 
-// After looping, zoom to fit all markers
-if (markersGroup.getLayers().length) {
-  map.fitBounds(markersGroup.getBounds().pad(0.2));
-}
+      // Add to the cluster group
+      markersGroup.addLayer(marker);
+    });
 
-  // 6. Filter function
-   // 6. Filter & re-plot with explicit mapping
+    // After adding all markers, zoom to fit
+    if (markersGroup.getLayers().length) {
+      map.fitBounds(markersGroup.getBounds().pad(0.2));
+    }
+  }
+
+  // 6. Filter & re-plot
   function filterFacilities() {
-  const zip = zipInput.value.trim().toLowerCase();
-  const careVal = careSelect.value; // now exactly SUBTYPE or empty
+    const zip     = zipInput.value.trim().toLowerCase();
+    const careVal = careSelect.value; // exact SUBTYPE or empty
 
-  const filtered = facilities.filter(f => {
-    // ZIP match
-    const fzip = ("" + f.ZIP).toLowerCase();
-    const zipOK = !zip || fzip.startsWith(zip);
+    const filtered = facilities.filter((f) => {
+      // ZIP match
+      const fzip   = ("" + f.ZIP).toLowerCase();
+      const zipOK  = !zip || fzip.startsWith(zip);
 
-    // Care match: exact SUBTYPE match, or no filter
-    const careOK = !careVal || f.SUBTYPE === careVal;
+      // Care match: exact SUBTYPE match
+      const careOK = !careVal || f.SUBTYPE === careVal;
 
-    // Must have valid coords
-    const lat = parseFloat(f.N_LAT), lng = parseFloat(f.N_LON);
-    const coordsOK = !isNaN(lat) && !isNaN(lng);
+      // Valid coords
+      const lat    = parseFloat(f.N_LAT),
+            lng    = parseFloat(f.N_LON);
+      const coordsOK = !isNaN(lat) && !isNaN(lng);
 
-    return zipOK && careOK && coordsOK;
-  });
+      return zipOK && careOK && coordsOK;
+    });
 
-  plotMarkers(filtered);
-}
+    plotMarkers(filtered);
+  }
 
-  // 7. Wire up search button
+  // 7. Wire up the search button
   searchBtn.addEventListener("click", filterFacilities);
+
+  // 8. Sidebar toggle logic
+  const toggleBtn = document.getElementById("sidebar-toggle");
+  toggleBtn.addEventListener("click", () => {
+    const sb     = document.getElementById("sidebar");
+    const isOpen = sb.classList.toggle("expanded");
+    sb.classList.toggle("collapsed", !isOpen);
+    toggleBtn.textContent = isOpen ? "▶" : "◀";
+  });
 });
