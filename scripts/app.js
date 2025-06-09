@@ -54,16 +54,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 6. Filter function
+   // 6. Filter & re-plot with explicit mapping
   function filterFacilities() {
     const zip = zipInput.value.trim().toLowerCase();
-    const care = careSelect.value.trim().toLowerCase().replace("_", " ");
+
+    // Map select values to actual keywords in SUBTYPE
+    const careMap = {
+      assisted_supervisory: "SUPERVISORY",
+      assisted_personal:    "PERSONAL",
+      assisted_directed:    "DIRECTED",
+      memory_care:          "MEMORY",
+      skilled_nursing:      "SKILLED NURSING"
+    };
+    const careKey = careMap[careSelect.value] || "";
+
     const filtered = facilities.filter((f) => {
+      // ZIP match
       const fzip = ("" + f.ZIP).toLowerCase();
       const zipOK = !zip || fzip.startsWith(zip);
-      const subtype = (f.SUBTYPE || "").toLowerCase();
-      const careOK = !care || subtype.includes(care);
+
+      // Care match: look for the mapped keyword in SUBTYPE
+      const subtype = (f.SUBTYPE || "").toUpperCase();
+      const careOK = !careKey || subtype.includes(careKey);
+
       return zipOK && careOK;
     });
+
     plotMarkers(filtered);
   }
 
