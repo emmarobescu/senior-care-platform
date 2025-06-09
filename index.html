@@ -52,6 +52,20 @@
 
   <!-- MAP CONTAINER -->
   <div id="map" style="height: 80vh; margin-bottom: 20px;"></div>
+  
+  <!-- INFO SIDEBAR -->
+  <div id="sidebar" class="collapsed">
+    <button id="sidebar-toggle">◀</button>
+    <div id="sidebar-content">
+      <!-- Filled dynamically on marker click -->
+      <h3 id="sb-name"></h3>
+      <p><strong>Type:</strong> <span id="sb-type"></span></p>
+      <p><strong>Address:</strong> <span id="sb-address"></span></p>
+      <p><strong>Phone:</strong> <span id="sb-phone"></span></p>
+      <p><strong>Capacity:</strong> <span id="sb-capacity"></span></p>
+      <!-- future: DHS inspections/deficiencies -->
+    </div>
+  </div>
 
   <!-- MAIN CONTENT -->
   <main>
