@@ -32,45 +32,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 5. Plot helper using the cluster group
   function plotMarkers(list) {
-    markersGroup.clearLayers();
-    if (list.length === 0) {
-      alert("No facilities match your search.");
-      return;
-    }
+  markersGroup.clearLayers();
+  if (list.length === 0) {
+    alert("No facilities match your search.");
+    return;
+  }
 
-    list.forEach((f) => {
-      const lat = parseFloat(f.N_LAT),
-            lng = parseFloat(f.N_LON);
-      if (isNaN(lat) || isNaN(lng)) return;
+  list.forEach((f) => {
+    const lat = parseFloat(f.N_LAT),
+          lng = parseFloat(f.N_LON);
+    if (isNaN(lat) || isNaN(lng)) return;
 
-      // Create the marker
-      const marker = L.marker([lat, lng]);
+    // Create the marker
+    const marker = L.marker([lat, lng]);
 
-      // On click, populate and open the sidebar instead of a popup
-      marker.on("click", () => {
-        // Fill in sidebar fields
-        document.getElementById("sb-name").textContent     = f.FACILITY_NAME;
-        document.getElementById("sb-type").textContent     = f.SUBTYPE;
-        document.getElementById("sb-address").textContent  = `${f.ADDRESS}, ${f.CITY}, AZ ${f.ZIP}`;
-        document.getElementById("sb-phone").textContent    = f.Telephone || "N/A";
-        document.getElementById("sb-capacity").textContent = f.Capacity || "N/A";
+    // Prepare the popup content
+    const popupHtml = `
+      <strong>${f.FACILITY_NAME}</strong><br/>
+      ${f.ADDRESS}, ${f.CITY}, AZ ${f.ZIP}<br/>
+      ${f.SUBTYPE}
+    `;
+    marker.bindPopup(popupHtml);
 
-        // Expand the sidebar
-        const sb = document.getElementById("sidebar");
-        sb.classList.add("expanded");
-        sb.classList.remove("collapsed");
-        document.getElementById("sidebar-toggle").textContent = "◀";
-      });
+    // On click, open the popup AND populate/expand the sidebar
+    marker.on("click", () => {
+      // 1) Show the popup over the marker
+      marker.openPopup();
 
-      // Add to the cluster group
-      markersGroup.addLayer(marker);
+      // 2) Populate sidebar fields
+      document.getElementById("sb-name").textContent     = f.FACILITY_NAME;
+      document.getElementById("sb-type").textContent     = f.SUBTYPE;
+      document.getElementById("sb-address").textContent  = `${f.ADDRESS}, ${f.CITY}, AZ ${f.ZIP}`;
+      document.getElementById("sb-phone").textContent    = f.Telephone || "N/A";
+      document.getElementById("sb-capacity").textContent = f.Capacity || "N/A";
+
+      // 3) Expand the sidebar
+      const sb = document.getElementById("sidebar");
+      sb.classList.add("expanded");
+      sb.classList.remove("collapsed");
+      document.getElementById("sidebar-toggle").textContent = "◀";
     });
 
-    // After adding all markers, zoom to fit
-    if (markersGroup.getLayers().length) {
-      map.fitBounds(markersGroup.getBounds().pad(0.2));
-    }
+    // Add to the cluster group
+    markersGroup.addLayer(marker);
+  });
+
+  // Zoom to fit
+  if (markersGroup.getLayers().length) {
+    map.fitBounds(markersGroup.getBounds().pad(0.2));
   }
+}
 
   // 6. Filter & re-plot
   function filterFacilities() {
